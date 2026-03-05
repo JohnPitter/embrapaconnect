@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FARMER
+  ADMIN
+}
+
+enum CropType {
+  SOJA
+  MILHO
+  CAFE
+  CANA
+  ALGODAO
+  TRIGO
+  ARROZ
+  FEIJAO
+  MANDIOCA
+  OUTRO
+}
+
+enum CropStage {
+  PREPARO
+  PLANTIO
+  GERMINACAO
+  CRESCIMENTO
+  FLORACAO
+  FRUTIFICACAO
+  MATURACAO
+  COLHEITA
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  ALERT
+}
+
+enum AlertCategory {
+  INCENDIO
+  PRAGA
+  SECA
+  OUTRO
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String
+  name           String
+  phone          String?
+  role           Role      @default(FARMER)
+  avatarConfig   Json?
+  emailVerified  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  farms                Farm[]
+  chatMessages         ChatMessage[]
+  chatRooms            ChatRoomParticipant[]
+  passwordResetTokens  PasswordResetToken[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model Farm {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  description       String?
+  state             String
+  city              String
+  address           String?
+  latitude          Float
+  longitude         Float
+  totalAreaHectares Float
+  boundaryCoords    Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  crops    Crop[]
+  chatRoom ChatRoom?
+
+  @@index([userId])
+  @@index([state, city])
+  @@index([latitude, longitude])
+}
+
+model Crop {
+  id                 String    @id @default(cuid())
+  farmId             String
+  farm               Farm      @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  type               CropType
+  customTypeName     String?
+  areaHectares       Float
+  plantedAt          DateTime
+  estimatedHarvestAt DateTime
+  currentStage       CropStage @default(PREPARO)
+  stageUpdatedAt     DateTime  @default(now())
+  growthData         Json
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  logs CropLog[]
+
+  @@index([farmId])
+  @@index([type])
+  @@index([currentStage])
+}
+
+model CropLog {
+  id         String    @id @default(cuid())
+  cropId     String
+  crop       Crop      @relation(fields: [cropId], references: [id], onDelete: Cascade)
+  stage      CropStage
+  percentage Float
+  notes      String?
+  photoUrl   String?
+  loggedAt   DateTime  @default(now())
+
+  @@index([cropId])
+  @@index([loggedAt])
+}
+
+model ChatRoom {
+  id        String   @id @default(cuid())
+  farmId    String   @unique
+  farm      Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  messages     ChatMessage[]
+  participants ChatRoomParticipant[]
+
+  @@index([farmId])
+}
+
+model ChatRoomParticipant {
+  id       String   @id @default(cuid())
+  roomId   String
+  room     ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
+
+  @@unique([roomId, userId])
+  @@index([userId])
+}
+
+model ChatMessage {
+  id            String         @id @default(cuid())
+  roomId        String
+  room          ChatRoom       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId      String
+  sender        User           @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content       String
+  type          MessageType    @default(TEXT)
+  alertCategory AlertCategory?
+  imageUrl      String?
+  readAt        DateTime?
+  createdAt     DateTime       @default(now())
+
+  @@index([roomId, createdAt])
+  @@index([senderId])
+}
