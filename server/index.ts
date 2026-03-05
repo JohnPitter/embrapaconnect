@@ -2,6 +2,7 @@ import { createServer } from "http";
 import { Server as SocketServer } from "socket.io";
 import next from "next";
 import { parse } from "url";
+import { decode } from "next-auth/jwt";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -26,8 +27,23 @@ app.prepare().then(() => {
   // Track online users: socketId -> userId
   const onlineUsers = new Map<string, string>();
 
-  io.on("connection", (socket) => {
-    const userId = socket.handshake.auth?.userId as string | undefined;
+  io.on("connection", async (socket) => {
+    const token = socket.handshake.auth?.token as string | undefined;
+    let userId: string | undefined;
+
+    if (token) {
+      try {
+        const decoded = await decode({
+          token,
+          secret: process.env.NEXTAUTH_SECRET ?? "dev-secret",
+          salt: "authjs.session-token",
+        });
+        userId = decoded?.sub ?? undefined;
+      } catch {
+        // Invalid token — proceed without userId
+      }
+    }
+
     if (userId) {
       onlineUsers.set(socket.id, userId);
     }

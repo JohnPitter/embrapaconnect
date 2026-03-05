@@ -33,8 +33,8 @@ async function main() {
   });
 
   console.log("Seed concluído!");
-  console.log("Admin: admin@embrapa.br / Admin@2026");
-  console.log("Farmer: joao@fazenda.com / Farmer@2026");
+  console.log("Admin seeded: admin@embrapa.br");
+  console.log("Farmer seeded: joao@fazenda.com");
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect());

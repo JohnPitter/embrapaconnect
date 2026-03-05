@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { getRoomMessages, saveMessage } from "@/services/chat.service";
+import { getRoomMessages, saveMessage, canAccessRoom } from "@/services/chat.service";
 import { z } from "zod";
 
 const messageSchema = z.object({
@@ -18,6 +18,15 @@ export async function GET(
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const hasAccess = await canAccessRoom(
+    params.id,
+    session.user.id,
+    (session.user as any).role === "ADMIN"
+  );
+  if (!hasAccess) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const messages = await getRoomMessages(params.id);
@@ -47,6 +56,15 @@ export async function POST(
   }
 
   const userId = (session.user as { id: string }).id;
+
+  const hasAccess = await canAccessRoom(
+    params.id,
+    userId,
+    (session.user as any).role === "ADMIN"
+  );
+  if (!hasAccess) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const body = await req.json();
   const parsed = messageSchema.safeParse(body);

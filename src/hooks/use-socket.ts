@@ -14,8 +14,8 @@ export function useSocket() {
   useEffect(() => {
     if (!userId) return;
 
-    import("@/lib/socket").then(({ getSocket }) => {
-      const sock = getSocket(userId);
+    import("@/lib/socket").then(async ({ getSocket }) => {
+      const sock = await getSocket();
       socketRef.current = sock;
 
       sock.on("connect", () => setConnected(true));

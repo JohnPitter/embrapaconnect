@@ -67,6 +67,21 @@ export async function getRoomMessages(roomId: string, limit = 50) {
   });
 }
 
+export async function canAccessRoom(
+  roomId: string,
+  userId: string,
+  isAdmin: boolean
+): Promise<boolean> {
+  if (isAdmin) return true;
+  const room = await prisma.chatRoom.findFirst({
+    where: {
+      id: roomId,
+      farm: { userId },
+    },
+  });
+  return room !== null;
+}
+
 export async function saveMessage(data: {
   roomId: string;
   senderId: string;

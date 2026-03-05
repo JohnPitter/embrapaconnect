@@ -1,11 +1,15 @@
 import { io, type Socket } from "socket.io-client";
+import { getSession } from "next-auth/react";
 
 let socket: Socket | null = null;
 
-export function getSocket(userId: string): Socket {
+export async function getSocket(): Promise<Socket> {
   if (!socket) {
+    const session = await getSession();
+    const token = (session as any)?._token ?? "";
+
     socket = io({
-      auth: { userId },
+      auth: { token },
       transports: ["websocket", "polling"],
       autoConnect: true,
     });

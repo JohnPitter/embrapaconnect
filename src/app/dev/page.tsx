@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardLight } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,10 @@ import { StatBlock } from "@/components/ui/stat-block";
 import { SectionHeader } from "@/components/ui/section-header";
 
 export default function DevPage() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   return (
     <div className="min-h-screen bg-dark-base p-12">
       <h1 className="mb-12 font-display text-4xl font-black text-lime-accent">Design System Preview</h1>
