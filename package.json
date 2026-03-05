@@ -18,32 +18,35 @@
     "test:e2e:docker": "docker compose -f docker-compose.test.yml up --exit-code-from playwright"
   },
   "dependencies": {
-    "next": "14.2.5",
-    "react": "^18",
-    "react-dom": "^18",
-    "typescript": "^5",
-    "@prisma/client": "^5.16.1",
-    "next-auth": "^5.0.0-beta.20",
     "@auth/prisma-adapter": "^2.4.2",
+    "@prisma/client": "^5.16.1",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "bcryptjs": "^2.4.3",
-    "zod": "^3.23.8",
-    "lucide-react": "^0.400.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "lucide-react": "^0.400.0",
+    "next": "14.2.5",
+    "next-auth": "^5.0.0-beta.20",
+    "react": "^18",
+    "react-dom": "^18",
+    "resend": "^3.4.0",
     "tailwind-merge": "^2.4.0",
-    "resend": "^3.4.0"
+    "typescript": "^5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "prisma": "^5.16.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "tailwindcss": "^3.4.1",
-    "postcss": "^8",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "prisma": "^5.16.1",
+    "tailwindcss": "^3.4.1",
     "tsx": "^4.16.2"
   }
 }
