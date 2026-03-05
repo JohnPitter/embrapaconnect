@@ -1,36 +1,13 @@
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { getFarmById } from "@/services/farm.service";
+import { getCropsByFarm } from "@/services/crop.service";
 import { Header } from "@/components/layout/header";
 import { CardLight } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { CropCard } from "@/components/crops/crop-card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, Plus, Sprout } from "lucide-react";
-
-const CROP_LABELS: Record<string, string> = {
-  SOJA: "Soja",
-  MILHO: "Milho",
-  CAFE: "Café",
-  CANA: "Cana-de-açúcar",
-  ALGODAO: "Algodão",
-  TRIGO: "Trigo",
-  ARROZ: "Arroz",
-  FEIJAO: "Feijão",
-  MANDIOCA: "Mandioca",
-  OUTRO: "Outro",
-};
-
-const STAGE_LABELS: Record<string, string> = {
-  PREPARO: "Preparo",
-  PLANTIO: "Plantio",
-  GERMINACAO: "Germinação",
-  CRESCIMENTO: "Crescimento",
-  FLORACAO: "Floração",
-  FRUTIFICACAO: "Frutificação",
-  MATURACAO: "Maturação",
-  COLHEITA: "Colheita",
-};
 
 export default async function FazendaDetailPage({
   params,
@@ -41,8 +18,10 @@ export default async function FazendaDetailPage({
   if (!session?.user) notFound();
 
   const { id } = await params;
-  const farm = await getFarmById(id, (session.user as any).id);
+  const farm = await getFarmById(id, (session.user as { id: string }).id);
   if (!farm) notFound();
+
+  const crops = await getCropsByFarm(id);
 
   return (
     <>
@@ -73,7 +52,7 @@ export default async function FazendaDetailPage({
               Plantações
             </p>
             <p className="mt-2 font-display text-3xl font-bold text-dark-base">
-              {farm.crops.length}
+              {crops.length}
               <span className="text-lg font-normal text-gray-400"> culturas</span>
             </p>
           </CardLight>
@@ -91,7 +70,7 @@ export default async function FazendaDetailPage({
             </Link>
           </div>
 
-          {farm.crops.length === 0 ? (
+          {crops.length === 0 ? (
             <div className="flex flex-col items-center py-12 text-center">
               <Sprout className="h-10 w-10 text-gray-300" />
               <p className="mt-3 text-[14px] text-gray-500">
@@ -104,28 +83,9 @@ export default async function FazendaDetailPage({
               </Link>
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
-              {farm.crops.map((crop) => (
-                <div
-                  key={crop.id}
-                  className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-5 py-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <Sprout className="h-4 w-4 text-mid-green" />
-                    <div>
-                      <p className="font-medium text-dark-base">
-                        {CROP_LABELS[crop.type] ?? crop.type}
-                      </p>
-                      <p className="text-[12px] text-gray-500">
-                        {crop.areaHectares} ha &mdash; Plantado em{" "}
-                        {new Date(crop.plantedAt).toLocaleDateString("pt-BR")}
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="lime">
-                    {STAGE_LABELS[crop.currentStage] ?? crop.currentStage}
-                  </Badge>
-                </div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {crops.map((crop) => (
+                <CropCard key={crop.id} crop={crop} />
               ))}
             </div>
           )}
