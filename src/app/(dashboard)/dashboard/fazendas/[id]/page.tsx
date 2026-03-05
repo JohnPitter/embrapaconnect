@@ -5,6 +5,7 @@ import { getCropsByFarm } from "@/services/crop.service";
 import { Header } from "@/components/layout/header";
 import { CardLight } from "@/components/ui/card";
 import { CropCard } from "@/components/crops/crop-card";
+import { Farm3DSection } from "@/components/farms/farm-3d-section";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, Plus, Sprout } from "lucide-react";
@@ -91,15 +92,13 @@ export default async function FazendaDetailPage({
           )}
         </CardLight>
 
-        {/* Placeholder para 3D (será implementado na Task 8) */}
+        {/* Visualização 3D */}
         <CardLight>
           <h2 className="mb-4 font-display text-[20px] font-bold text-dark-base">
             Visualização 3D
           </h2>
-          <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-dark-base/5">
-            <p className="text-[14px] text-gray-400">
-              Visualização 3D — disponível após adicionar plantações
-            </p>
+          <div className="h-[500px]">
+            <Farm3DSection crops={crops} />
           </div>
         </CardLight>
       </div>
