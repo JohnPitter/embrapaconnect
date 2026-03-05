@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 const steps = [
   {
@@ -25,46 +26,52 @@ export function HowItWorksSection() {
     <section id="como-funciona" className="bg-dark-green py-24 md:py-32">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mb-16 text-center">
-          <SectionHeader
-            label="Como Funciona"
-            headline={
-              <>
-                Três passos para{" "}
-                <span className="text-lime-accent">transformar</span>{" "}
-                sua fazenda
-              </>
-            }
-            description="Do cadastro ao acompanhamento científico em menos de 10 minutos."
-            center
-            dark
-          />
+          <AnimateIn>
+            <SectionHeader
+              label="Como Funciona"
+              headline={
+                <>
+                  Três passos para{" "}
+                  <span className="text-lime-accent">transformar</span>{" "}
+                  sua fazenda
+                </>
+              }
+              description="Do cadastro ao acompanhamento científico em menos de 10 minutos."
+              center
+              dark
+            />
+          </AnimateIn>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((step, i) => (
-            <div key={step.number} className="relative flex flex-col gap-4">
-              {/* Connector line */}
-              {i < steps.length - 1 && (
-                <div className="absolute right-0 top-8 hidden h-px w-6 bg-lime-accent/30 md:block translate-x-full" />
-              )}
-              <div className="rounded-2xl border border-white/10 bg-dark-base/50 p-8 backdrop-blur-sm">
-                <span className="font-display text-[64px] font-black leading-none text-lime-accent/20">
-                  {step.number}
-                </span>
-                <h3 className="mt-4 font-display text-[20px] font-bold text-white">{step.title}</h3>
-                <p className="mt-2 text-[14px] leading-relaxed text-light-muted">{step.description}</p>
+            <AnimateIn key={step.number} delay={i * 150}>
+              <div className="relative flex flex-col gap-4">
+                {/* Connector line */}
+                {i < steps.length - 1 && (
+                  <div className="absolute right-0 top-8 hidden h-px w-6 bg-lime-accent/30 md:block translate-x-full" />
+                )}
+                <div className="rounded-2xl border border-white/10 bg-dark-base/50 p-8 backdrop-blur-sm">
+                  <span className="font-display text-[64px] font-black leading-none text-lime-accent/20">
+                    {step.number}
+                  </span>
+                  <h3 className="mt-4 font-display text-[20px] font-bold text-white">{step.title}</h3>
+                  <p className="mt-2 text-[14px] leading-relaxed text-light-muted">{step.description}</p>
+                </div>
               </div>
-            </div>
+            </AnimateIn>
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
-          <Link href="/register">
-            <Button variant="primary" size="lg" arrow>
-              Começar agora
-            </Button>
-          </Link>
-        </div>
+        <AnimateIn delay={300}>
+          <div className="mt-12 flex justify-center">
+            <Link href="/register">
+              <Button variant="primary" size="lg" arrow>
+                Começar agora
+              </Button>
+            </Link>
+          </div>
+        </AnimateIn>
       </div>
     </section>
   );

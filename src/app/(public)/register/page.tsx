@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-dark-base px-6 py-16">
-      <div className="w-full max-w-sm">
+      <AnimateIn threshold={0} className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href="/" className="font-display text-[28px] font-black text-lime-accent">
             EC.
@@ -138,7 +139,7 @@ export default function RegisterPage() {
             Entrar
           </Link>
         </p>
-      </div>
+      </AnimateIn>
     </div>
   );
 }

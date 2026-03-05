@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 export default function ForgotPasswordPage() {
   const [sent, setSent] = useState(false);
@@ -26,7 +27,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-dark-base px-6">
-      <div className="w-full max-w-sm">
+      <AnimateIn threshold={0} className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href="/" className="font-display text-[28px] font-black text-lime-accent">
             EC.
@@ -73,7 +74,7 @@ export default function ForgotPasswordPage() {
             </Link>
           </form>
         )}
-      </div>
+      </AnimateIn>
     </div>
   );
 }

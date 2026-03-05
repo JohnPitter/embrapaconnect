@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, FormEvent, Suspense } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 function LoginForm() {
   const router = useRouter();
@@ -31,7 +32,10 @@ function LoginForm() {
     if (result?.error) {
       setError("Email ou senha inválidos.");
     } else {
-      router.push(callbackUrl);
+      const session = await getSession();
+      const role = (session?.user as any)?.role;
+      const dest = callbackUrl !== "/dashboard" ? callbackUrl : role === "ADMIN" ? "/admin" : "/dashboard";
+      router.push(dest);
       router.refresh();
     }
   }
@@ -90,7 +94,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-dark-base px-6">
-      <div className="w-full max-w-sm">
+      <AnimateIn threshold={0} className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href="/" className="font-display text-[28px] font-black text-lime-accent">
             EC.
@@ -106,7 +110,7 @@ export default function LoginPage() {
         <Suspense fallback={<div className="text-light-muted text-center">Carregando...</div>}>
           <LoginForm />
         </Suspense>
-      </div>
+      </AnimateIn>
     </div>
   );
 }

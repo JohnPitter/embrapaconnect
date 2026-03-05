@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getAvatarConfig } from "@/services/avatar.service";
 import { AvatarBuilder } from "@/components/avatar/avatar-builder";
 import { Header } from "@/components/layout/header";
+import { AnimateIn } from "@/components/ui/animate-in";
 import { User } from "lucide-react";
 
 export default async function AvatarPage() {
@@ -15,22 +16,26 @@ export default async function AvatarPage() {
     <>
       <Header title="Meu Avatar" breadcrumb={["Dashboard", "Meu Avatar"]} />
       <div className="p-8">
-        <div className="mb-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-lime-accent/10">
-              <User className="h-5 w-5 text-mid-green" />
-            </div>
-            <div>
-              <h1 className="font-display text-[24px] font-bold text-dark-base">
-                Meu Avatar
-              </h1>
-              <p className="text-[14px] text-gray-500">
-                Personalize seu agricultor virtual
-              </p>
+        <AnimateIn threshold={0} delay={0}>
+          <div className="mb-8">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-lime-accent/10">
+                <User className="h-5 w-5 text-mid-green" />
+              </div>
+              <div>
+                <h1 className="font-display text-[24px] font-bold text-dark-base">
+                  Meu Avatar
+                </h1>
+                <p className="text-[14px] text-gray-500">
+                  Personalize seu agricultor virtual
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <AvatarBuilder initialConfig={avatarConfig} />
+        </AnimateIn>
+        <AnimateIn threshold={0} delay={120}>
+          <AvatarBuilder initialConfig={avatarConfig} />
+        </AnimateIn>
       </div>
     </>
   );

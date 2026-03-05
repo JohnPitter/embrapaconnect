@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 export function CtaSection() {
   return (
@@ -14,37 +15,39 @@ export function CtaSection() {
             <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-mid-green/30 blur-3xl" />
           </div>
 
-          <div className="relative z-10">
-            <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-lime-accent">
-              Junte-se a nós
-            </p>
-            <h2 className="font-display text-[40px] font-black uppercase leading-tight tracking-tight text-white md:text-[56px]">
-              PRONTO PARA{" "}
-              <span className="text-lime-accent">TRANSFORMAR</span>{" "}
-              SUA FAZENDA?
-            </h2>
-            <p className="mx-auto mt-6 max-w-lg text-[15px] leading-relaxed text-light-muted">
-              Cadastre-se gratuitamente e conecte sua propriedade à rede de
-              suporte científico da Embrapa.
-            </p>
+          <AnimateIn>
+            <div className="relative z-10">
+              <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-lime-accent">
+                Junte-se a nós
+              </p>
+              <h2 className="font-display text-[40px] font-black uppercase leading-tight tracking-tight text-white md:text-[56px]">
+                PRONTO PARA{" "}
+                <span className="text-lime-accent">TRANSFORMAR</span>{" "}
+                SUA FAZENDA?
+              </h2>
+              <p className="mx-auto mt-6 max-w-lg text-[15px] leading-relaxed text-light-muted">
+                Cadastre-se gratuitamente e conecte sua propriedade à rede de
+                suporte científico da Embrapa.
+              </p>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link href="/register">
-                <Button variant="primary" size="lg" arrow>
-                  Cadastrar fazenda agora
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button variant="outlined" size="lg">
-                  Já tenho conta
-                </Button>
-              </Link>
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                <Link href="/register">
+                  <Button variant="primary" size="lg" arrow>
+                    Cadastrar fazenda agora
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button variant="outlined" size="lg">
+                    Já tenho conta
+                  </Button>
+                </Link>
+              </div>
+
+              <p className="mt-6 text-[12px] text-light-muted/50">
+                Gratuito para produtores rurais. Suporte da Embrapa incluído.
+              </p>
             </div>
-
-            <p className="mt-6 text-[12px] text-light-muted/50">
-              Gratuito para produtores rurais. Suporte da Embrapa incluído.
-            </p>
-          </div>
+          </AnimateIn>
         </div>
       </div>
     </section>

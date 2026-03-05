@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AnimateIn } from "@/components/ui/animate-in";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -82,7 +83,7 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-dark-base px-6">
-      <div className="w-full max-w-sm">
+      <AnimateIn threshold={0} className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href="/" className="font-display text-[28px] font-black text-lime-accent">
             EC.
@@ -101,7 +102,7 @@ export default function ResetPasswordPage() {
         >
           <ResetPasswordForm />
         </Suspense>
-      </div>
+      </AnimateIn>
     </div>
   );
 }

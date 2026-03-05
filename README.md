@@ -10,11 +10,10 @@
 
 **Plataforma digital que conecta produtores rurais à Embrapa**
 
-*Mapeamento de fazendas, visualização 3D, acompanhamento científico e comunicação direta com especialistas*
+*Mapeamento de fazendas, visualização 3D isométrica, acompanhamento científico e comunicação direta com especialistas*
 
 [Funcionalidades](#funcionalidades) •
 [Instalação](#instalação) •
-[Screenshots](#screenshots) •
 [Configuração](#configuração) •
 [Documentação](#documentação)
 
@@ -28,9 +27,9 @@ EmbrapaConnect é uma plataforma web que aproxima produtores rurais brasileiros 
 
 **O que você encontra:**
 - **Mapeamento de Fazendas** — Desenhe o perímetro da sua propriedade e cadastre suas plantações
-- **Visualização 3D** — Veja sua fazenda em 3D com visual estilo Colheita Feliz
+- **Visualização 3D Isométrica** — Fazenda renderizada em low-poly 3D com câmera isométrica e paleta pastel
 - **Timeline Científica** — Acompanhe a evolução da plantação dia a dia baseado em dados da Embrapa
-- **Avatar Personalizado** — Monte seu boneco 3D com cor de pele, olhos, corpo, óculos e chapéu
+- **Avatar Personalizado** — Personagem 3D low-poly com cor de pele, olhos, chapéu e óculos configuráveis
 - **Mapa Geográfico** — Embrapa visualiza todas as fazendas no mapa real do Brasil por estado/cidade
 - **Chat em Tempo Real** — Canal direto entre produtor e Embrapa para dúvidas, alertas e emergências
 
@@ -42,13 +41,14 @@ EmbrapaConnect é uma plataforma web que aproxima produtores rurais brasileiros 
 |----------------|-----------|
 | **Cadastro e Autenticação** | Email/senha com recuperação de senha via email |
 | **Mapeamento Digital** | Desenhe o perímetro da fazenda no mapa, adicione culturas com área e data de plantio |
-| **Fazenda 3D** | Renderização 3D da propriedade com modelos por tipo de cultura e estágio de crescimento |
+| **Fazenda 3D Isométrica** | Cena low-poly com câmera ortográfica a 30°, paleta pastel e iluminação soft studio |
 | **Timeline Interativa** | Arraste o slider para ver qualquer momento da evolução da plantação |
 | **Progresso Científico** | Ciclos de crescimento baseados em publicações da Embrapa por cultura |
-| **Avatar 3D Animado** | Personagem customizável com animação idle |
+| **Avatar 3D Animado** | Personagem low-poly customizável com animação idle flutuante |
 | **Mapa do Brasil** | Visão geográfica real das fazendas por estado e município (painel Embrapa) |
 | **Chat com Alertas** | Mensagens de texto, imagens e alertas categorizados (incêndio, praga, seca) |
 | **Painel Admin** | Dashboard completo para equipe Embrapa com métricas e gestão |
+| **Landing Page Animada** | Seções com animações de entrada scroll-triggered via Intersection Observer |
 
 ---
 
@@ -58,12 +58,12 @@ EmbrapaConnect é uma plataforma web que aproxima produtores rurais brasileiros 
 |--------|------------|
 | **Framework** | Next.js 14 (App Router) |
 | **Linguagem** | TypeScript |
-| **ORM** | Prisma |
+| **ORM** | Prisma 5 |
 | **Banco** | PostgreSQL 16 |
 | **Auth** | NextAuth.js (Credentials) |
 | **3D** | React Three Fiber + @react-three/drei |
 | **Mapa** | Mapbox GL JS |
-| **Chat** | Socket.io |
+| **Chat** | Socket.io 4 |
 | **UI** | Tailwind CSS + Shadcn/ui |
 | **Email** | Resend |
 | **Ícones** | Lucide React |
@@ -145,20 +145,23 @@ RESEND_API_KEY="re_seu-token-aqui"
 ENCRYPTION_KEY="gerar-com-openssl-rand-hex-32"
 ```
 
-### Usuário Admin Padrão (seed)
+### Usuários Padrão (seed)
 
-```
-Email: admin@embrapa.br
-Senha: Admin@2026
-```
+| Role | Nome | Email | Senha |
+|------|------|-------|-------|
+| **Admin** | Administrador Embrapa | `admin@embrapa.br` | `Admin@2026` |
+| **Farmer** | João da Silva | `joao@fazenda.com` | `Farmer@2026` |
+| **Farmer** | Maria Fernanda Costa | `maria@sojafazenda.com` | `Farmer@2026` |
+| **Farmer** | Carlos Eduardo Mendes | `carlos@cafereal.com` | `Farmer@2026` |
+| **Farmer** | Ana Paula Rodrigues | `ana@nordestina.com` | `Farmer@2026` |
+
+**Fazendas de exemplo:**
+- João → Fazenda Boa Esperança (MT) — soja + milho; Sítio São João (MT) — algodão
+- Maria → Fazenda Planície Verde (RS) — soja + trigo
+- Carlos → Cafeicultura Serrana (MG) — café
+- Ana → Roça da Família Rodrigues (CE) — feijão + mandioca
 
 > **Importante:** Altere as credenciais em produção.
-
----
-
-## Screenshots
-
-> Em breve — projeto em desenvolvimento.
 
 ---
 
@@ -175,6 +178,19 @@ Senha: Admin@2026
 | Arroz | 100–140 dias | Embrapa Arroz e Feijão |
 | Feijão | 70–100 dias | Embrapa Arroz e Feijão |
 | Mandioca | 240–540 dias | Embrapa Mandioca e Fruticultura |
+
+---
+
+## Design Visual
+
+A plataforma adota uma estética **low-poly 3D isométrica** inspirada em ilustrações SaaS modernas:
+
+- **Câmera ortográfica** a 30° (isométrica) nas cenas 3D de fazenda e avatar
+- **Paleta pastel** — verde sage, terracota suave, azul pastel, bege quente
+- **Geometria low-poly** — cilindros 5–6 lados, esferas 6–8 segmentos, nuvens cúbicas
+- **Iluminação soft studio** — luz ambiente aquecida + fill fria, sombras suaves
+- **Diorama flutuante** — ilha com base visível, fundo creme `#F0EDE8`
+- **Animações de entrada** — fade + slide-up via Intersection Observer em toda a landing page
 
 ---
 
@@ -228,9 +244,10 @@ embrapaconnect/
 │   │   ├── (dashboard)/ # Painel do fazendeiro
 │   │   └── (admin)/   # Painel Embrapa
 │   ├── components/    # Componentes React
-│   │   ├── ui/        # Design system
+│   │   ├── ui/        # Design system (inclui AnimateIn)
 │   │   ├── layout/    # Navbar, sidebar, footer
-│   │   ├── 3d/        # Componentes React Three Fiber
+│   │   ├── home/      # Seções da landing page
+│   │   ├── 3d/        # Cenas React Three Fiber (low-poly isométrico)
 │   │   ├── map/       # Componentes Mapbox
 │   │   └── chat/      # Componentes de chat
 │   ├── lib/           # Utilitários e configs
