@@ -52,7 +52,7 @@ export default function AdminChatPage() {
     room.participants.find((p) => p.user.role === "FARMER")?.user.name ?? "Fazendeiro";
 
   return (
-    <div className="flex h-screen">
+    <div className="-m-8 flex h-full">
       {/* Room list */}
       <div className="w-72 flex-shrink-0 overflow-y-auto border-r border-white/5 bg-dark-base">
         <div className="border-b border-white/5 p-4">

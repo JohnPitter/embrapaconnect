@@ -31,7 +31,7 @@ export default async function MapaPage() {
   const farms = await getAllFarmsForMap();
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="-m-8 flex h-full flex-col">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/5 bg-dark-base px-8 py-4">
         <div className="flex items-center gap-3">
@@ -49,14 +49,26 @@ export default async function MapaPage() {
           </div>
         </div>
         {/* Legend */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5">
             <div className="h-3 w-3 rounded-full bg-lime-accent" />
             <span className="text-[12px] text-light-muted">Normal</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-500" />
-            <span className="text-[12px] text-light-muted">Alerta</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[14px] leading-none">🔥</span>
+            <span className="text-[12px] text-light-muted">Incêndio</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[14px] leading-none">🐛</span>
+            <span className="text-[12px] text-light-muted">Praga</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[14px] leading-none">☀️</span>
+            <span className="text-[12px] text-light-muted">Seca</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[14px] leading-none">⚠️</span>
+            <span className="text-[12px] text-light-muted">Outro</span>
           </div>
         </div>
       </div>
