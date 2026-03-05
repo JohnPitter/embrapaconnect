@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import type { CreateFarmInput, UpdateFarmInput } from "@/types/farm";
+import type { FarmMapMarker } from "@/types/map";
 
 export async function getFarmsByUser(userId: string) {
   return prisma.farm.findMany({
@@ -42,6 +43,28 @@ export async function getAllFarmsForAdmin() {
     },
     orderBy: { createdAt: "desc" },
   });
+}
+
+export async function getAllFarmsForMap(): Promise<FarmMapMarker[]> {
+  const farms = await prisma.farm.findMany({
+    include: {
+      user: { select: { name: true } },
+      _count: { select: { crops: true } },
+    },
+  });
+
+  return farms.map((f) => ({
+    id: f.id,
+    name: f.name,
+    latitude: f.latitude,
+    longitude: f.longitude,
+    state: f.state,
+    city: f.city,
+    userId: f.userId,
+    userName: f.user.name ?? "Fazendeiro",
+    totalCrops: f._count.crops,
+    hasAlert: false, // will be set by chat alerts in Task 12
+  }));
 }
 
 export async function createFarm(userId: string, data: CreateFarmInput) {
