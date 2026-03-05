@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: embrapaconnect_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app-test:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres-test:5432/embrapaconnect_test
+      NEXTAUTH_SECRET: test-secret-for-e2e
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: pk.test
+      RESEND_API_KEY: re_dev
+      ENCRYPTION_KEY: 00000000000000000000000000000000
+      NODE_ENV: test
+      PORT: "3000"
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+    command: >
+      sh -c "node_modules/.bin/prisma migrate deploy && node_modules/.bin/tsx prisma/seed.ts && node_modules/.bin/tsx server/index.ts"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 30s
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.40.0-jammy
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      BASE_URL: http://app-test:3000
+      CI: "true"
+    depends_on:
+      app-test:
+        condition: service_healthy
+    command: npx playwright test --reporter=list
+
+volumes: {}
