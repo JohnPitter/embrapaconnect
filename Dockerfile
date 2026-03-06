@@ -15,6 +15,7 @@ ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/embrapaconnect"
 ENV NEXTAUTH_SECRET="build-time-secret"
 ENV NEXTAUTH_URL="http://localhost:3000"
 ENV DOCKER_BUILD=1
+RUN pnpm exec prisma generate
 RUN pnpm build
 
 FROM base AS runner
