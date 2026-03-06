@@ -1,4 +1,5 @@
 FROM node:20-alpine AS base
+RUN apk add --no-cache openssl
 RUN npm install -g pnpm
 
 FROM base AS deps
@@ -14,6 +15,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="postgresql://postgres:postgres@postgres:5432/embrapaconnect"
 ENV NEXTAUTH_SECRET="build-time-secret"
 ENV NEXTAUTH_URL="http://localhost:3000"
+ENV RESEND_API_KEY="re_placeholder"
 ENV DOCKER_BUILD=1
 RUN pnpm exec prisma generate
 RUN pnpm build
